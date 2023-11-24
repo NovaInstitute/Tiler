@@ -1,0 +1,34 @@
+---
+title: "Tiler Vignette"
+author: "Christiaan Pauw"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(Tiler)
+```
+
+# What this document is about
+
+The document demonstrates the functionality of the Tiler package. 
+
+# Setup
+
+First you have to set up the connection to kubernetes cluster running ComposeDB.
+
+```{r}
+setupComposedbK8s()
+```
+
+
+get your key. 
+
+```{r}
+
+```
+

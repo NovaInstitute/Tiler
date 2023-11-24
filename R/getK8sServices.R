@@ -15,8 +15,8 @@ getK8sServices <-function(namespace = "ceramic", type = c("NodePort", "LoadBalan
 
         LB <- system(sprintf("kubectl get service --namespace %s", namespace), intern = TRUE) %>%
                 tibble() %>%
-                set_names("x") %>%
-                separate(col = x, into = c( "NAME", "TYPE", "CLUSTER_IP", "EXTERNAL_IP", "PORTS", "AGE"), sep = "[[:space:]]+") %>%
+                purrr::set_names("x") %>%
+                tidyr::separate(col = x, into = c( "NAME", "TYPE", "CLUSTER_IP", "EXTERNAL_IP", "PORTS", "AGE"), sep = "[[:space:]]+") %>%
                 filter(NAME != "NAME")
 
         if (!is.null(type)) LB <- LB %>%filter(TYPE == type)
