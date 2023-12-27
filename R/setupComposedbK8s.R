@@ -46,17 +46,16 @@ setupComposedbK8s <- function(namespace = "ceramic",
         )
 
         system(sprintf('export COMPOSEDB_API_ENDPOINT=%s', exportPort))
-        system(sprintf('export DID_PRIVATE_KEY=%s', pk))
-        system(sprintf('export CERAMIC_URL=%s', URL))
-
         result_endpoint <- system("echo $COMPOSEDB_API_ENDPOINT", intern = TRUE)
-        result_did_key <- system("echo $DID_PRIVATE_KEY", intern = TRUE)
-        result_ceramic_url <- system("echo $CERAMIC_URL", intern = TRUE)
-
         message(result_endpoint)
-        message(result_did_key)
-        message(result_ceramic_url)
 
+        system(sprintf('export DID_PRIVATE_KEY=%s', pk))
+        result_did_key <- system("echo $DID_PRIVATE_KEY", intern = TRUE)
+        message(result_did_key)
+
+        system(sprintf('export CERAMIC_URL=%s', URL))
+        result_ceramic_url <- system("echo $CERAMIC_URL", intern = TRUE)
+        message(result_ceramic_url)
 
         if (returnlist)  return(list(DID_PRIVATE_KEY = pk, CERAMIC_URL = URL))
         URL
