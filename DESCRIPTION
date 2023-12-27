@@ -10,4 +10,7 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    dplyr
+    dplyr,
+    purrr,
+    tidyr
+RoxygenNote: 7.2.3

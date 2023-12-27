@@ -6,7 +6,7 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 ```{r}
@@ -21,14 +21,49 @@ The document demonstrates the functionality of the Tiler package.
 
 First you have to set up the connection to kubernetes cluster running ComposeDB.
 
+## From a local machine when composedDB was installed with K8S
+
+Look at your namespaces. 
+
 ```{r}
-setupComposedbK8s()
+listK8sNamespaces()
+```
+
+Mine is called `ceramic`.
+
+Get the name of the user
+
+```{r}
+listK8sSecrets()
+```
+
+Mine is `ceramic-admin`
+
+Get your key with your namespace and name. Default options (field = "data", subfield = "private-key") should work. 
+
+```{r}
+key <- getK8sSecrets(namespace = "ceramic", name = "ceramic-admin", field = "data", subfield = "private-key")
+```
+
+Run ceramic. The runCeramic R-function is just a convenient wrapper for \texttt{system("npx @ceramicnetwork/cli daemon)} with the \texttt{--network option}. The default: \textttt{--network=testnet-clay}
+
+```{r}
+runCeramic()
 ```
 
 
-get your key. 
+Check the status 
 
 ```{r}
-
+getCeramicStatus(key = key)
 ```
+
+
+Set up connection to kubernetes cluster running composedb.
+
+```{r}
+url <- setupComposedbK8s(namespace = "ceramic", secretname = "ceramic-admin")
+```
+
+
 

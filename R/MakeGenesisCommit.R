@@ -1,5 +1,5 @@
 
-#' MakeGenesisCommit
+#' makeGenesisCommit
 #' @description
 #' Create a Genesis commit
 #'
@@ -8,11 +8,11 @@
 #' @param controllers Character. DID
 #' @param returnJSON Logical. Return JSON (default) or R list
 #'
-#' @return
+#' @return list or if returnJSON is TRUE, JSON
 #' @export
 #'
 #' @examples
-MakeGenesisCommit <- function(type = "0",
+makeGenesisCommit <- function(type = "0",
                               family = "test",
                               controllers = c("did:key:z6MkfZ6S4NVVTEuts8o5xFzRMR8eC6Y1bngoBQNnXiCvhH8H"),
                               returnJSON = TRUE){

@@ -1,8 +1,8 @@
 
 
-key <- CDBgenerateKey()
-acc <- CDBgenerateAcc(key = key)
-save(key, acc, file = "data/inteken.Rda")
+# key <- CDBgenerateKey()
+# acc <- CDBgenerateAcc(key = key)
+# save(key, acc, file = "data/inteken.Rda")
 
 makeCeramicMNaccess <- function(DID = NULL){
         if (is.null(DID)) stop("DID cannotbe NULL")

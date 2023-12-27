@@ -1,5 +1,4 @@
 
-
 #' getCeramicStream
 #'
 #' @param URL Ceramic URL . Default CERAMIC_URL http://146.190.193.80:7007
@@ -10,7 +9,9 @@
 #' @export
 #'
 #' @examples
-getCeramicStream <- function(URL = CERAMIC_URL, SID = mtcarSID, contentAsTibble = FALSE){
+getCeramicStream <- function(URL = CERAMIC_URL,
+                             SID = mtcarSID,
+                             contentAsTibble = FALSE){
         res <- httr::GET(glue("{URL}/api/v0/streams/:{SID}"))
         resc <- httr::content(res)
         if (contentAsTibble) return(

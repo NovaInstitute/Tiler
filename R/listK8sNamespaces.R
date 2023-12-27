@@ -2,15 +2,15 @@
 #' @return Character
 #' @export
 #' @import dplyr
-#' @examples
-#' @import dplyr
+#' @import purrr
 #' @import tidyr
+#' @examples
 #' listK8sNamespaces()
 
 listK8sNamespaces <- function(){
         system("kubectl get namespaces", intern = TRUE) %>%
-                tibble() %>%
+                dplyr::tibble() %>%
                 purrr::set_names("een") %>%
                 tidyr::separate(col = een, into = c("NAME", "STATUS", "AGE"), sep = "[[:space:]]+") %>%
-                filter(NAME != "NAME")
+                dplyr::filter(NAME != "NAME")
 }

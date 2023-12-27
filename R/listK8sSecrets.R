@@ -1,6 +1,9 @@
 #' listK8sSecrets
 #' @return
 #' @param namespace Character. to see all use: system("kubectl get namespaces")
+#' @import dplyr
+#' @import purrr
+#' @import tidyr
 #' @export
 #'
 #' @examples
