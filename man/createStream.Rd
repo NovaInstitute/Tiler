@@ -21,7 +21,7 @@ createStream(
 
 \item{type}{Numeric. Default: 0}
 
-\item{family}{Character. !!!  FIgure out what this is}
+\item{family}{Character. !!!  Figure out what this is}
 }
 \description{
 createStream

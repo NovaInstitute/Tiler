@@ -4,7 +4,7 @@
 \alias{CDBModelList}
 \title{CDBModelList}
 \usage{
-CDBModelList(tab = TRUE, remoteURL = "http://46.101.111.94/", port = "7007")
+CDBModelList(tab = TRUE, remoteURL = "http://146.190.6.248", port = "7007")
 }
 \arguments{
 \item{tab}{Logical}
@@ -15,6 +15,9 @@ CDBModelList(tab = TRUE, remoteURL = "http://46.101.111.94/", port = "7007")
 Charachter
 }
 \description{
+!!! does thos work correctly with a remote server??
+}
+\details{
 CDBModelList
 }
 \examples{

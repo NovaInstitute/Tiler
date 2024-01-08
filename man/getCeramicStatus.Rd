@@ -4,7 +4,7 @@
 \alias{getCeramicStatus}
 \title{getCeramicStatus}
 \usage{
-getCeramicStatus(key, url = "http://localhost:7007/")
+getCeramicStatus(key, url = "http://0.0.0.0:7007/")
 }
 \arguments{
 \item{key}{Character.}
