@@ -9,8 +9,10 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
-```{r}
+```{r libraries}
 library(Tiler)
+library(httr)
+library(glue)
 ```
 
 # What this document is about
@@ -25,45 +27,93 @@ First you have to set up the connection to kubernetes cluster running ComposeDB.
 
 Look at your namespaces. 
 
-```{r}
-listK8sNamespaces()
+```{r namespaces}
+listK8sNamespaces() %>% knitr::kable(format = "pipe")
 ```
 
 Mine is called `ceramic`.
 
 Get the name of the user
 
-```{r}
-listK8sSecrets()
+```{r secret}
+listK8sSecrets() %>% knitr::kable(format = "pipe")
 ```
 
 Mine is `ceramic-admin`
 
+```{r constants}
+clustername <- "composedb"
+namespace <- "ceramic"
+```
+
+
 Get your key with your namespace and name. Default options (field = "data", subfield = "private-key") should work. 
 
-```{r}
-key <- getK8sSecrets(namespace = "ceramic", name = "ceramic-admin", field = "data", subfield = "private-key")
+```{r key}
+key <- getK8sSecrets(namespace = "ceramic", 
+                     name = "ceramic-admin", 
+                     field = "data", subfield = "private-key")
 ```
 
-Run ceramic. The runCeramic R-function is just a convenient wrapper for \texttt{system("npx @ceramicnetwork/cli daemon)} with the \texttt{--network option}. The default: \textttt{--network=testnet-clay}
+Get the external URL
 
-```{r}
-runCeramic()
+```{r externalurl}}
+ URL <- getK8sServices()$EXTERNAL_IP
 ```
-
 
 Check the status 
 
-```{r}
-getCeramicStatus(key = key)
+```{r status}
+res <- httr::GET(glue("http://{URL}:7007/api/v0/node/healthcheck"))
+httr::status_code(res)
 ```
 
+Try to set port forwarding, but it doesn't work. Rather make \texttt{CERAMIC_URL} the remote URL. 
 
-Set up connection to kubernetes cluster running composedb.
 
-```{r}
-url <- setupComposedbK8s(namespace = "ceramic", secretname = "ceramic-admin")
+```{r remoteurl}
+# system(glue("kubectl port-forward --namespace {namespace} composedb-0 7007:7007"))
+REMOTE_URL <- glue::glue("http://{URL}:{7007}")
 ```
 
+# Tiles
 
+Lets create a tile. 
+
+```{r tile}}
+mtcarSID <- glaze_tile_create(CERAMIC_URL = REMOTE_URL, 
+                              k = key, 
+                              content = jsonlite::toJSON(mtcars[1:2,]))
+```
+
+The stream ID is: `r mtcarSID`
+
+We can use this to see the content:
+
+```{r content}
+dfContent <- glaze_tile_content(STREAMID = mtcarSID, 
+                    CERAMIC_URL = REMOTE_URL, 
+                    k = key, 
+                    returnJSON = FALSE) 
+knitr::kable(dfContent, digits = 1)
+```
+
+Lets try to update it with the next to lines of mtcars: 
+
+```{r update}
+glaze_tile_update(STREAMID = mtcarSID, 
+                  CERAMIC_URL = REMOTE_URL,   
+                  k = DID_PRIVATE_KEY, 
+                  content = jsonlite::toJSON(mtcars[3:4,]))
+```
+
+Now it didn't append, it replaced! We can build our own updater that appends, but this will be expensive with large data sets. 
+
+# Models
+
+The function getComposeDBModelContent is not yet implemented correctly.
+
+```{r modelcontent}
+# getComposeDBModelContent(url = "http://146.190.6.248:7007" )
+```
 
