@@ -9,6 +9,8 @@
 #' @export
 #'
 #' @examples
+#' getCeramicStream(URL = "http://146.190.6.248:7007", SID = "kjzl6cwe1jw14blkfyymlen4d48ljm1dxl9tijy975b6n8v62m1uwbiy1lz00vn", contentAsTibble = TRUE)
+
 getCeramicStream <- function(URL = CERAMIC_URL,
                              SID = mtcarSID,
                              contentAsTibble = FALSE){
