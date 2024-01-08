@@ -12,6 +12,12 @@ You can install the development version of Tiler from GitHub with:
 
 ## **Usage**
 
+See Vignette
+
+## **License**
+
+This package is free and open source software, licensed under Apache License 2.0.
+
 Load Tiler into your R environment with:
 
 library(Tiler)
