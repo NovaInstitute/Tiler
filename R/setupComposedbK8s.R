@@ -35,6 +35,8 @@ setupComposedbK8s <- function(namespace = "ceramic",
                                 localport,
                                 k8sport)
 
+        system(port_forward)
+
         exportPort <- sprintf("http://localhost:%s", localport)
         URL <- getK8sServices()$EXTERNAL_IP
         if (is.null(pk)) pk <- getK8sSecrets(namespace = namespace, name = secretname, field = "data", subfield = "private-key")
@@ -45,19 +47,29 @@ setupComposedbK8s <- function(namespace = "ceramic",
                 CERAMIC_URL = URL
         )
 
-        system(sprintf('export COMPOSEDB_API_ENDPOINT=%s', exportPort))
-        result_endpoint <- system("echo $COMPOSEDB_API_ENDPOINT", intern = TRUE)
-        message(result_endpoint)
-
-        system(sprintf('export DID_PRIVATE_KEY=%s', pk))
-        result_did_key <- system("echo $DID_PRIVATE_KEY", intern = TRUE)
-        message(result_did_key)
-
-        system(sprintf('export CERAMIC_URL=%s', URL))
-        result_ceramic_url <- system("echo $CERAMIC_URL", intern = TRUE)
-        message(result_ceramic_url)
+        set_bash_env_variable_list(l = list(COMPOSEDB_API_ENDPOINT = exportPort,
+                                            DID_PRIVATE_KEY = pk,
+                                            CERAMIC_URL = URL))
 
         if (returnlist)  return(list(DID_PRIVATE_KEY = pk, CERAMIC_URL = URL))
         URL
 
 }
+
+set_bash_env_variable_list <- function(l = list(COMPOSEDB_API_ENDPOINT=url,
+                                                DID_PRIVATE_KEY =key) ) {
+        map2(names(l), l, ~set_bash_env_variable(name =  ..1, var = ..2))
+}
+
+set_bash_env_variable <- function(name = "COMPOSEDB_API_ENDPOINT", var = url){
+        fn <- tempfile(fileext = ".sh")
+        insides <- sprintf("export %s=%s" , name, var)
+        script <- sprintf("echo '%s' >> ~/.bashrc", insides)
+        cat(script, file = fn)
+        system(glue::glue("chmod +x {fn}"))   # Ensure the script is executable
+        system(fn)        # Execute the script to set the environment variable
+        system("source ~/.bashrc")
+        unlink(fn)
+}
+
+
